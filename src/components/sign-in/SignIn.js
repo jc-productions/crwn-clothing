@@ -1,0 +1,63 @@
+import React, { Component } from "react";
+import FormInput from "../../components/form-input/FormInput";
+import CustomButton from "../custom-button/CustomButton";
+
+// Google Login
+import { signInWithGoogle } from "../../firebase/firebase.utils";
+
+import "./SignIn.styles.scss";
+export default class SignIn extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      email: "jason@gmail.com",
+      password: "1234"
+    };
+  }
+
+  handleChange = e => {
+    const { value, name } = e.target;
+    this.setState({ [name]: value });
+  };
+
+  handleSubmit = e => {
+    e.preventDefault();
+    this.setState({
+      email: "",
+      password: ""
+    });
+  };
+
+  render() {
+    return (
+      <div className="sign-in">
+        <h2>I already have an account</h2>
+        <span>sign in with your email and password</span>
+
+        <form onSubmit={this.handleSubmit}>
+          <FormInput
+            name="email"
+            type="email"
+            value={this.state.email}
+            label="email"
+            handleChange={this.handleChange}
+          />
+          <FormInput
+            name="password"
+            type="password"
+            value={this.state.password}
+            label="password"
+            handleChange={this.handleChange}
+          />
+
+          <div className="buttons">
+            <CustomButton type="submit">Sign In </CustomButton>{" "}
+            <CustomButton onClick={signInWithGoogle} isGoogleSignIn>
+              Sign In With Google
+            </CustomButton>
+          </div>
+        </form>
+      </div>
+    );
+  }
+}
