@@ -12,25 +12,36 @@ import Users from "./pages/sign-in-and-sign-out/Users";
 import HeaderComponent from "./components/header/HeaderComponent";
 
 // FIREBASE
-import { auth } from "./firebase/firebase.utils";
+import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
 
-export default class App extends Component {
-  constructor() {
-    super();
+// REDUX
+import { connect } from "react-redux";
+import { setCurrentUser } from "./redux/user/userAction";
 
-    this.state = {
-      currentUser: null
-    };
-  }
-
+class App extends Component {
   unsubscribeFromAuth = null;
 
   // open subscription
   componentDidMount() {
+    const { setCurrentUser } = this.props;
+
     // get the user current state
-    this.unsubscribeFromAuth = auth.onAuthStateChanged(user => {
-      this.setState({ currentUser: user });
-      console.log(user);
+    this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
+      if (userAuth) {
+        const userRef = await createUserProfileDocument(userAuth);
+
+        userRef.onSnapshot(snapShot => {
+          console.log(snapShot.data());
+          setCurrentUser({
+            currentUser: {
+              id: snapShot.id,
+              ...snapShot.data()
+            }
+          });
+        });
+      } else {
+        setCurrentUser(userAuth);
+      }
     });
   }
 
@@ -42,7 +53,7 @@ export default class App extends Component {
   render() {
     return (
       <div className="App">
-        <HeaderComponent currentUser={this.state.currentUser} />
+        <HeaderComponent />
         <Switch>
           <Route exact path="/" component={HomePage} />
           <Route exact path="/shop" component={ShopPage} />
@@ -52,6 +63,12 @@ export default class App extends Component {
     );
   }
 }
+
+const mapDispatchToProps = dispatch => ({
+  setCurrentUser: user => dispatch(setCurrentUser(user))
+});
+// connect(state, action )
+export default connect(null, mapDispatchToProps)(App);
 
 {
   /* exact = put all page/ component in a single page or pages will also be render on the same page if there is no exact key word */

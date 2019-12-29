@@ -13,6 +13,34 @@ const config = {
   measurementId: "G-0BK5P6XLMX"
 };
 
+// Create user account asynchronous method
+export const createUserProfileDocument = async (userAuth, additionalData) => {
+  if (!userAuth) return;
+
+  const userRef = firestore.doc(`users/${userAuth.uid}`);
+
+  // snapShot is simply the data that displayed
+  const snapShot = await userRef.get();
+  if (!snapShot.exists) {
+    // documentRef mainly used for CRUD
+    const { displayName, email } = userAuth;
+    const createdAt = new Date();
+
+    try {
+      await userRef.set({
+        displayName,
+        email,
+        createdAt,
+        ...additionalData
+      });
+    } catch (err) {
+      console.log("error creating user", err.message);
+    }
+  }
+
+  return userRef;
+};
+
 firebase.initializeApp(config);
 
 export const auth = firebase.auth();

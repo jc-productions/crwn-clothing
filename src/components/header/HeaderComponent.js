@@ -4,9 +4,11 @@ import { auth } from "../../firebase/firebase.utils";
 
 import { ReactComponent as Logo } from "../../assets/Logo.svg";
 
+import { connect } from "react-redux";
+
 import "./HeaderComponent.styles.scss";
 
-export default function HeaderComponent({ currentUser }) {
+const HeaderComponent = ({ currentUser }) => {
   return (
     <div className="header">
       <Link className="logo-container" to="/">
@@ -33,4 +35,10 @@ export default function HeaderComponent({ currentUser }) {
       </div>
     </div>
   );
-}
+};
+
+const mapStateToProps = state => ({
+  currentUser: state.user.currentUser
+});
+
+export default connect(mapStateToProps)(HeaderComponent);
