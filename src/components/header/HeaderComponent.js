@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import { auth } from "../../firebase/firebase.utils";
 
 import { ReactComponent as Logo } from "../../assets/Logo.svg";
-import CartIcon from "../../components/cart-icon/CardIcon";
-import CardDropdown from "../card-dropdown/CardDropdown";
+import CartIcon from "../../components/cart-icon/CartIcon";
+import CartDropdown from "../cart-dropdown/CartDropdown";
 import { connect } from "react-redux";
 
 import "./HeaderComponent.styles.scss";
@@ -35,7 +35,7 @@ const HeaderComponent = ({ currentUser, hidden }) => {
         )}
         <CartIcon />
       </div>
-      {hidden ? null : <CardDropdown />}
+      {hidden ? null : <CartDropdown />}
     </div>
   );
 };

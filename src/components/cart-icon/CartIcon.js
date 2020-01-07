@@ -1,6 +1,6 @@
 import React from "react";
 import { ReactComponent as ShoppingIcon } from "../../assets/shopping-cart.svg";
-import "./CardIcon.styles.scss";
+import "./CartIcon.styles.scss";
 
 // FUNCTIONALITIES
 import { connect } from "react-redux";

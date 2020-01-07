@@ -2,7 +2,7 @@ import React from "react";
 
 import CustomButton from "../custom-button/CustomButton";
 
-import "./CardDropdown.styles.scss";
+import "./CartDropdown.styles.scss";
 
 export default function CardDropdown() {
   return (
