@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./App.css";
 
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, Redirect } from "react-router-dom";
 
 // PAGES
 import ShopPage from "./pages/shop/ShopPage";
@@ -56,23 +56,26 @@ class App extends Component {
         <HeaderComponent />
         <Switch>
           <Route exact path="/" component={HomePage} />
-          <Route exact path="/shop" component={ShopPage} />
-          <Route exact path="/signin" component={Users} />
+          <Route path="/shop" component={ShopPage} />
+          <Route
+            exact
+            path="/signin"
+            render={() =>
+              this.props.currentUser ? <Redirect to="/" /> : <Users />
+            }
+          />
         </Switch>
       </div>
     );
   }
 }
 
+const mapStateToProps = ({ user }) => ({
+  currentUser: user.currentUser
+});
+
 const mapDispatchToProps = dispatch => ({
   setCurrentUser: user => dispatch(setCurrentUser(user))
 });
-// connect(state, action )
-export default connect(null, mapDispatchToProps)(App);
 
-{
-  /* exact = put all page/ component in a single page or pages will also be render on the same page if there is no exact key word */
-  /* path = base url */
-  /* component = the page that render */
-  /* Switch = if the path or url are matched any Route's path in Switch, will not be render */
-}
+export default connect(mapStateToProps, mapDispatchToProps)(App);
